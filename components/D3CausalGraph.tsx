@@ -41,13 +41,14 @@ const D3CausalGraph: React.FC = () => {
         offset: ["start start", "end start"] // Adjust based on where this component lives relative to viewport
     });
 
-    // 3. Map Scroll to Animation Phases
-    // 0.0 - 0.2: Highlight (Base black -> Parents Orange / Target Red)
-    // 0.2 - 0.4: Deletion (Target opacity 1 -> 0)
-    // 0.4 - 1.0: Addition (Spawn purple nodes)
-    const phase1 = useTransform(scrollYProgress, [0, 0.2], [0, 1]); // Highlight
-    const phase2 = useTransform(scrollYProgress, [0.2, 0.3], [1, 0]); // Deletion (Opacity)
-    const phase3 = useTransform(scrollYProgress, [0.35, 0.8], [0, 1]); // Addition (Count)
+    // 3. Map Scroll to Animation Phases - COMPRESSED TIMELINE
+    // The entire animation now completes in the first 50% of the scroll.
+    // 0.0 - 0.15: Highlight
+    // 0.15 - 0.25: Deletion (Fast)
+    // 0.25 - 0.50: Addition (Fill up quickly)
+    const phase1 = useTransform(scrollYProgress, [0, 0.15], [0, 1]); // Highlight
+    const phase2 = useTransform(scrollYProgress, [0.15, 0.25], [1, 0]); // Deletion (Opacity)
+    const phase3 = useTransform(scrollYProgress, [0.25, 0.5], [0, 1]); // Addition (Count)
 
 
     // 4. Generate Initial Static Graph (The "Base" State)
