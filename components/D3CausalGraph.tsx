@@ -41,14 +41,13 @@ const D3CausalGraph: React.FC = () => {
         offset: ["start start", "end start"] // Adjust based on where this component lives relative to viewport
     });
 
-    // 3. Map Scroll to Animation Phases - HYPER FAST
-    // The entire animation now completes in the first ~12% of the scroll.
-    // 0.00 - 0.05: Highlight
-    // 0.05 - 0.08: Deletion (Instant)
-    // 0.08 - 0.12: Addition (Rapid fill)
-    const phase1 = useTransform(scrollYProgress, [0, 0.05], [0, 1]); // Highlight
-    const phase2 = useTransform(scrollYProgress, [0.05, 0.08], [1, 0]); // Deletion (Opacity)
-    const phase3 = useTransform(scrollYProgress, [0.08, 0.12], [0, 1]); // Addition (Count)
+    // 3. Map Scroll to Animation Phases - ULTRA FAST
+    // 0.00 - 0.04: Highlight
+    // 0.04 - 0.07: Deletion
+    // 0.07 - 0.10: Addition
+    const phase1 = useTransform(scrollYProgress, [0, 0.04], [0, 1]); // Highlight
+    const phase2 = useTransform(scrollYProgress, [0.04, 0.07], [1, 0]); // Deletion (Opacity)
+    const phase3 = useTransform(scrollYProgress, [0.07, 0.10], [0, 1]); // Addition (Count)
 
 
     // 4. Generate Initial Static Graph (The "Base" State)
