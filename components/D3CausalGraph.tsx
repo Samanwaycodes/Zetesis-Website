@@ -139,26 +139,29 @@ const D3CausalGraph: React.FC = () => {
         const nodes: Node[] = [];
         const links: Link[] = [];
 
-        for (let k = 0; k < count; k++) {
+        let attempts = 0;
+        while (nodes.length < count && attempts < 200) {
+            attempts++;
             const newNode = {
-                id: `new-${k}`,
+                id: `new-${nodes.length}`,
                 // Try to place them in the "hole" created by the deleted node, or generally around
                 x: Math.random() * dimensions.width * 0.6 + dimensions.width * 0.2,
                 y: Math.random() * dimensions.height * 0.8 + dimensions.height * 0.1,
                 type: 'new' as const
             };
-            nodes.push(newNode);
 
             // Find a VALID neighbor to connect FROM
-            // Must be an existing 'base' or 'parent' node (not target, not another new node to avoid chains for now)
+            // Must be an existing 'base' or 'parent' node (not target)
             // And must be to the LEFT (causal direction)
             const validParents = initialNodes.filter(n =>
                 n.type !== 'target' &&
                 n.x < newNode.x &&
-                Math.hypot(n.x - newNode.x, n.y - newNode.y) < dimensions.width / 4
+                Math.hypot(n.x - newNode.x, n.y - newNode.y) < dimensions.width / 3
             );
 
+            // ONLY add the node if we found a parent
             if (validParents.length > 0) {
+                nodes.push(newNode);
                 // Pick the closest one
                 const nearest = validParents.reduce((prev, curr) => {
                     const dCurr = Math.hypot(curr.x - newNode.x, curr.y - newNode.y);
